@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container text-center" style="height: 100vh;">
+    <div class="card p-4 shadow-lg rounded">
+        <h2 class="text-center mb-4">Order Confirmed!</h2>
+        <p>Your order has been successfully placed. Thank you for choosing us!</p>
+        <p>We will prepare your pizza and deliver it to the address you provided.</p>
+
+        <div class="mt-4">
+            <h4>Order Summary</h4>
+            <p><strong>Pizza Size:</strong> {{ pizza.size }}</p>
+            <p><strong>Crust:</strong> {{ pizza.crust }}</p>
+            <p><strong>Sauce:</strong> {{ pizza.sauce }}</p>
+            <p><strong>Cheese:</strong> {{ pizza.cheese }}</p>
+            <p><strong>Toppings:</strong> {{ pizza.toppings.all|join:", " }}</p>
+
+            <h5 class="mt-3">Delivery Address:</h5>
+            <p>{{ address.address_line_1 }} <br>
+               {% if address.address_line_2 %}{{ address.address_line_2 }} <br>{% endif %}
+               {{ address.city }}, {{ address.county }} <br>
+               {{ address.country }} - {{ address.eircode }}</p>
+        </div>
+
+        <div class="mt-4">
+            <h5>Payment Summary</h5>
+            <p><strong>Name on Card:</strong> {{ payment.name_on_card }}</p>
+            <p><strong>Card Number:</strong> {{ payment.card_num }}</p>
+            <p><strong>Expiry:</strong> {{ payment.expiration_month }}/{{ payment.expiration_year }}</p>
+        </div>
+
+        <a href="/" class="btn btn-primary mt-4">Go to Home</a>
+    </div>
+</div>
+{% endblock %}
+

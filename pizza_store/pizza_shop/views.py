@@ -3,6 +3,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import login, logout
 from django.contrib.auth.views import LoginView
 from django.contrib.auth.decorators import login_required
+from django.utils import timezone
 from .forms import *
 from .models import *
 
@@ -50,9 +51,6 @@ def payment(request):
     pizza_id = request.session.get("pizza_id")
     address_id = request.session.get("address_id")
 
-    if not pizza_id or not address_id:
-        return redirect("create_pizza")
-
     pizza = Pizza.objects.get(id=pizza_id)
     address = AddressInfo.objects.get(id=address_id)
 
@@ -61,6 +59,7 @@ def payment(request):
         if payment_form.is_valid():
             payment = payment_form.save()
 
+            # Create an Order object
             new_order = Order(
                 user=request.user,
                 pizza=pizza,
@@ -70,10 +69,14 @@ def payment(request):
             )
             new_order.save()
 
+            # Save the order id in the session for later use
+            request.session["order_id"] = new_order.id
+
+            # Clear pizza and address from the session after placing the order
             request.session.pop("pizza_id", None)
             request.session.pop("address_id", None)
 
-            return redirect("order_confimed")
+            return redirect("order_confirmed")  # Redirect to order confirmation page
 
     else:
         payment_form = PaymentForm()
@@ -89,8 +92,35 @@ def payment(request):
     )
 
 
-def confirmed_order(request):
-    return render(request, "confirmed_order.html")
+@login_required
+def order_confirmed(request):
+    # Get the order ID from the session
+    order_id = request.session.get("order_id")
+
+    if not order_id:
+        # If no order ID in session, redirect to an error page or back to the payment page
+        return redirect(
+            "error_page"
+        )  # Replace with your actual error page URL or a different redirect
+
+    # Try to retrieve the order from the database
+    order = Order.objects.get(id=order_id)
+
+    # Prepare context for the order confirmation page
+    context = {
+        "pizza": order.pizza,
+        "address": order.address,
+        "payment": order.payment,
+    }
+
+    return render(request, "order_confirmed.html", context)
+
+
+@login_required
+def order_history(request):
+    orders = Order.objects.filter(user=request.user)
+
+    return render(request, "order_history.html", {"orders": orders})
 
 
 class UserRegisterView(CreateView):

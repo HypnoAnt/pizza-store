@@ -117,8 +117,6 @@ class PaymentInfo(models.Model):
 class AddressInfo(models.Model):
     address_line_1 = models.CharField(max_length=50)
     address_line_2 = models.CharField(max_length=50, blank=True)
-    city = models.CharField(max_length=50)
-    county = models.CharField(max_length=50)
     country = models.CharField(max_length=50)
     eircode = models.CharField(max_length=10)
 

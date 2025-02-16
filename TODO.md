@@ -25,7 +25,7 @@ TODO
 - CVV
 
 ## Confirm Order
-- ETA for pizza / TIme of their selection
+- Time of their selection
 - View Order
 
 ## Optional

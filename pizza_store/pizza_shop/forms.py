@@ -60,8 +60,8 @@ class PaymentForm(forms.ModelForm):
             "cvv": "CVV",
         }
         widgets = {
-            "card_num": forms.TextInput(
-                attrs={"pattern": "[0-9]{15-16}", "title": "15 digits required"}
+            "card_num": forms.NumberInput(
+                attrs={"pattern": "[0-9]{15,16}", "title": "15 digits required"}
             ),
             "expiration_month": forms.TextInput(
                 attrs={"pattern": "[0-9]{2}", "title": "2 digits required"}
@@ -70,7 +70,7 @@ class PaymentForm(forms.ModelForm):
                 attrs={"pattern": "[0-9]{4}", "title": "4 digits required"}
             ),
             "cvv": forms.TextInput(
-                attrs={"pattern": "[0-9]{3-4}", "title": "3 digits required"}
+                attrs={"pattern": "[0-9]{3,4}", "title": "3 digits required"}
             ),
         }
 
@@ -78,10 +78,16 @@ class PaymentForm(forms.ModelForm):
 class AddressForm(forms.ModelForm):
     class Meta:
         model = AddressInfo
-        fields = ["address_line_1", "address_line_2", "county", "eircode"]
+        fields = ["address_line_1", "address_line_2", "country", "eircode"]
         labels = {
             "address_line_1": "Address Line",
             "address_line_2": "Address Line 2",
-            "county": "County",
+            "country": "Country",
             "eircode": "Eircode",
+        }
+        widgets = {
+            "address_line_1": forms.TextInput(attrs={"class": "form-control"}),
+            "address_line_2": forms.TextInput(attrs={"class": "form-control"}),
+            "country": forms.TextInput(attrs={"class": "form-control"}),
+            "eircode": forms.TextInput(attrs={"class": "form-control"}),
         }

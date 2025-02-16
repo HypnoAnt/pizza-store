@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container">
+    <h2 class="text-center mb-4">Your Order History</h2>
+
+    {% if orders %}
+        <div class="list-group">
+            {% for order in orders %}
+                <div class="list-group-item">
+                    <h5>Order ID: {{ order.id }} - {{ order.data_ordered|date:"F j, Y, g:i a" }}</h5>
+
+                    <h6>Pizza Details</h6>
+                    <p><strong>Size:</strong> {{ order.pizza.size }}</p>
+                    <p><strong>Crust:</strong> {{ order.pizza.crust }}</p>
+                    <p><strong>Sauce:</strong> {{ order.pizza.sauce }}</p>
+                    <p><strong>Cheese:</strong> {{ order.pizza.cheese }}</p>
+                    <p><strong>Toppings:</strong> {{ order.pizza.toppings.all|join:", " }}</p>
+
+                    <h6>Delivery Address</h6>
+                    <p>{{ order.address.address_line_1 }} <br>
+                        {% if order.address.address_line_2 %}{{ order.address.address_line_2 }} <br>{% endif %}
+                        {{ order.address.city }}, {{ order.address.county }} <br>
+                        {{ order.address.country }} - {{ order.address.eircode }}</p>
+
+                    <h6>Payment Details</h6>
+                    <p><strong>Name on Card:</strong> {{ order.payment.name_on_card }}</p>
+                    <p><strong>Card Number:</strong> {{ order.payment.card_num|slice:"-4" }}</p>
+                    <p><strong>Expiry:</strong> {{ order.payment.expiration_month }}/{{ order.payment.expiration_year }}</p>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p>You have not made any orders yet.</p>
+    {% endif %}
+</div>
+{% endblock %}
+

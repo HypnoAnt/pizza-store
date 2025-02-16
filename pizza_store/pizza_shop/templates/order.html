@@ -1,40 +1,40 @@
 {% extends "base.html" %}
-
 {% block content %}
 <div class="container d-flex justify-content-center align-items-center" style="height: 100vh;">
     <div class="card p-4 shadow-lg rounded" style="width: 350px;">
         <h2 class="text-center mb-4">Make Your Pizza</h2>
 
-    <form method="POST">
-        {% csrf_token %}
+        <form method="POST">
+            {% csrf_token %}
 
-        <div class="form-group">
-            <label for="id_size">Size</label>
-            {{ form.size }}
-        </div>
+            <div class="mb-3">
+                <label for="id_size" class="form-label">Size</label>
+                {{ form.size }}
+            </div>
 
-        <div class="form-group">
-            <label for="id_crust">Crust</label>
-            {{ form.crust }}
-        </div>
+            <div class="mb-3">
+                <label for="id_crust" class="form-label">Crust</label>
+                {{ form.crust }}
+            </div>
 
-        <div class="form-group">
-            <label for="id_sauce">Sauce</label>
-            {{ form.sauce }}
-        </div>
+            <div class="mb-3">
+                <label for="id_sauce" class="form-label">Sauce</label>
+                {{ form.sauce }}
+            </div>
 
-        <div class="form-group">
-            <label for="id_cheese">Cheese</label>
-            {{ form.cheese }}
-        </div>
+            <div class="mb-3">
+                <label for="id_cheese" class="form-label">Cheese</label>
+                {{ form.cheese }}
+            </div>
 
-        <div class="form-group">
-            <label for="id_toppings">Toppings</label>
-            {{ form.toppings }}
-        </div>
+            <div class="mb-3">
+                <label for="id_toppings" class="form-label">Toppings</label>
+                {{ form.toppings }}
+            </div>
 
-        <button type="submit" class="btn btn-primary btn-block mt-3">Place Order</button>
-    </form>
+            <button type="submit" class="btn btn-primary w-100">Place Order</button>
+        </form>
+    </div>
 </div>
 {% endblock %}
 
