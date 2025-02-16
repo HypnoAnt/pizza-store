@@ -19,7 +19,7 @@ class UserRegisterForm(UserCreationForm):
     @transaction.atomic
     def save(self):
         user = super().save(commit=False)
-        user = is_admin = False
+        user.is_admin = False
         user.email = self.cleaned_data["email"]
         user.save()
         return user
@@ -28,3 +28,60 @@ class UserRegisterForm(UserCreationForm):
 class UserLoginForm(AuthenticationForm):
     def __init__(self, *args, **kwargs):
         super(UserLoginForm, self).__init__(*args, **kwargs)
+
+
+class PizzaForm(forms.ModelForm):
+    class Meta:
+        model = Pizza
+        fields = ["size", "crust", "sauce", "cheese", "toppings"]
+
+    toppings = forms.ModelMultipleChoiceField(
+        queryset=Toppings.objects.all(),
+        widget=forms.CheckboxSelectMultiple,
+        required=False,
+    )
+
+
+class PaymentForm(forms.ModelForm):
+    class Meta:
+        model = PaymentInfo
+        fields = [
+            "name_on_card",
+            "card_num",
+            "expiration_month",
+            "expiration_year",
+            "cvv",
+        ]
+        labels = {
+            "name_on_card": "Full Name",
+            "card_num": "Card Number",
+            "expiration_month": "Expiry Month",
+            "expiration_year": "Expiry Year",
+            "cvv": "CVV",
+        }
+        widgets = {
+            "card_num": forms.TextInput(
+                attrs={"pattern": "[0-9]{15-16}", "title": "15 digits required"}
+            ),
+            "expiration_month": forms.TextInput(
+                attrs={"pattern": "[0-9]{2}", "title": "2 digits required"}
+            ),
+            "expiration_year": forms.TextInput(
+                attrs={"pattern": "[0-9]{4}", "title": "4 digits required"}
+            ),
+            "cvv": forms.TextInput(
+                attrs={"pattern": "[0-9]{3-4}", "title": "3 digits required"}
+            ),
+        }
+
+
+class AddressForm(forms.ModelForm):
+    class Meta:
+        model = AddressInfo
+        fields = ["address_line_1", "address_line_2", "county", "eircode"]
+        labels = {
+            "address_line_1": "Address Line",
+            "address_line_2": "Address Line 2",
+            "county": "County",
+            "eircode": "Eircode",
+        }

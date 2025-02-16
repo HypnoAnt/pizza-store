@@ -22,8 +22,8 @@ class UserManager(BaseUserManager):
         return self._create_user(email, password, **extra_fields)
 
     def create_superuser(self, email, password, **extra_fields):
-        extra_fields.setdefault("is_staff", False)
-        extra_fields.setdefault("is_superuser", False)
+        extra_fields.setdefault("is_staff", True)
+        extra_fields.setdefault("is_superuser", True)
 
         if extra_fields.get("is_staff") is False:
             raise ValueError("Superuser must also be staff")
@@ -45,6 +45,18 @@ class User(AbstractBaseUser):
     is_superuser = models.BooleanField(default=False)
 
     objects = UserManager()
+
+    def has_perm(self, perm, obj=None):
+        return self.is_active
+
+    def has_module_perms(self, app_label):
+        return self.is_active
+
+    def get_full_name(self):
+        return self.email
+
+    def get_short_name(self):
+        return self.email
 
 
 class Pizza(models.Model):

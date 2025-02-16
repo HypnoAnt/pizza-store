@@ -1,9 +1,26 @@
-
-
-{% extends 'base.html' %}
+{% extends "base.html" %}
+{% load static %}
 
 {% block content %}
-<p>
-	OOPS I DID IT AGAIN
-</p>
+<div class="container d-flex justify-content-center align-items-center" style="height: 100vh;">
+
+    {% if user.is_authenticated %}
+        <!-- Logged-in user sees Order & Logout buttons -->
+        <div class="text-center">
+            <h2>Welcome, {{ user.username }}!</h2>
+            <a href="{% url 'order' %}" class="btn btn-primary m-2">Order</a>
+            <a href="{% url 'logout' %}" class="btn btn-danger m-2">Logout</a>
+        </div>
+
+    {% else %}
+        <!-- Guest users see Login & Register buttons -->
+        <div class="text-center">
+            <h2>Welcome to Pizza Store</h2>
+            <a href="{% url 'login' %}" class="btn btn-success m-2">Login</a>
+            <a href="{% url 'register' %}" class="btn btn-secondary m-2">Register</a>
+        </div>
+    {% endif %}
+
+</div>
 {% endblock %}
+
